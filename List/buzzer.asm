@@ -999,13 +999,13 @@ __START_OF_CODE:
 	RJMP 0x00
 	RJMP 0x00
 
-_0x15:
+_0x17:
 	.DB  0x0,0x0,0x0,0x0
 
 __GLOBAL_INI_TBL:
 	.DW  0x04
 	.DW  0x04
-	.DW  _0x15*2
+	.DW  _0x17*2
 
 _0xFFFFFFFF:
 	.DW  0
@@ -1153,14 +1153,14 @@ _Bip:
 	RJMP _0x4
 _0x3:
 ; 0000 0024              {
-; 0000 0025                PORTB.4 = 1;
-	SBI  0x18,4
+; 0000 0025                PORTB.4 = 0;
+	CBI  0x18,4
 ; 0000 0026                 delay_ms(100);
 	LDI  R30,LOW(100)
 	LDI  R31,HIGH(100)
 	RCALL SUBOPT_0x0
-; 0000 0027                 PORTB.4 = 0;
-	CBI  0x18,4
+; 0000 0027                 PORTB.4 = 1;
+	SBI  0x18,4
 ; 0000 0028                 delay_ms(50);
 	LDI  R30,LOW(50)
 	LDI  R31,HIGH(50)
@@ -1318,58 +1318,60 @@ _main:
 ; 0000 007D // Global enable interrupts
 ; 0000 007E #asm("sei")
 	sei
-; 0000 007F 
-; 0000 0080 while (1)
-_0xC:
-; 0000 0081       {
-; 0000 0082          if (PINB.0==1)
+; 0000 007F PORTB.4=1;
+	SBI  0x18,4
+; 0000 0080 
+; 0000 0081 while (1)
+_0xE:
+; 0000 0082       {
+; 0000 0083          if (PINB.0==1)
 	SBIS 0x16,0
-	RJMP _0xF
-; 0000 0083          {
-; 0000 0084             TCCR0A=0x02;
+	RJMP _0x11
+; 0000 0084          {
+; 0000 0085             TCCR0A=0x02;
 	LDI  R30,LOW(2)
 	OUT  0x2F,R30
-; 0000 0085             TCCR0B=0x05;
+; 0000 0086             TCCR0B=0x05;
 	LDI  R30,LOW(5)
 	OUT  0x33,R30
-; 0000 0086             if (i>read_adc(3)*10)
+; 0000 0087             if (i>read_adc(3)*3)
 	LDI  R30,LOW(3)
 	ST   -Y,R30
 	RCALL _read_adc
-	LDI  R26,LOW(10)
-	LDI  R27,HIGH(10)
+	LDI  R26,LOW(3)
+	LDI  R27,HIGH(3)
 	RCALL __MULW12U
 	CP   R30,R6
 	CPC  R31,R7
-	BRSH _0x10
-; 0000 0087             {
-; 0000 0088                Bip();
+	BRSH _0x12
+; 0000 0088             {
+; 0000 0089                Bip();
 	RCALL _Bip
-; 0000 0089              }
-; 0000 008A 
-; 0000 008B           }
-_0x10:
-; 0000 008C         else
-	RJMP _0x11
-_0xF:
-; 0000 008D         {
-; 0000 008E            TCCR0A=0x00;
+; 0000 008A              }
+; 0000 008B 
+; 0000 008C           }
+_0x12:
+; 0000 008D         else
+	RJMP _0x13
+_0x11:
+; 0000 008E         {
+; 0000 008F            TCCR0A=0x00;
 	LDI  R30,LOW(0)
 	OUT  0x2F,R30
-; 0000 008F            TCCR0B=0x00;
+; 0000 0090            TCCR0B=0x00;
 	OUT  0x33,R30
-; 0000 0090            PORTB.4=0;
-	CBI  0x18,4
-; 0000 0091            i=0;
+; 0000 0091            PORTB.4=1;
+	SBI  0x18,4
+; 0000 0092            i=0;
 	CLR  R6
 	CLR  R7
-; 0000 0092         }
-_0x11:
-; 0000 0093       }
-	RJMP _0xC
-; 0000 0094 }
-_0x14:
-	RJMP _0x14
+; 0000 0093         }
+_0x13:
+; 0000 0094       }
+	RJMP _0xE
+; 0000 0095 }
+_0x16:
+	RJMP _0x16
 
 	.CSEG
 ;OPTIMIZER ADDED SUBROUTINE, CALLED 3 TIMES, CODE SIZE REDUCTION:2 WORDS

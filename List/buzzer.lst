@@ -1,5 +1,5 @@
 
-AVRASM ver. 2.1.30  Z:\home\m153\Documents\buzzer\List\buzzer.asm Sat Sep 17 02:10:08 2016
+AVRASM ver. 2.1.30  Z:\home\m153\Documents\buzzer\List\buzzer.asm Mon Sep 19 10:11:55 2016
 
 Z:\home\m153\Documents\buzzer\List\buzzer.asm(981): warning: Register r4 already defined by the .DEF directive
 Z:\home\m153\Documents\buzzer\List\buzzer.asm(982): warning: Register r6 already defined by the .DEF directive
@@ -1005,14 +1005,14 @@ Z:\home\m153\Documents\buzzer\List\buzzer.asm(982): warning: Register r6 already
 000008 cff7      	RJMP 0x00
 000009 cff6      	RJMP 0x00
                  
-                 _0x15:
+                 _0x17:
 00000a 0000
 00000b 0000      	.DB  0x0,0x0,0x0,0x0
                  
                  __GLOBAL_INI_TBL:
 00000c 0004      	.DW  0x04
 00000d 0004      	.DW  0x04
-00000e 0014      	.DW  _0x15*2
+00000e 0014      	.DW  _0x17*2
                  
                  _0xFFFFFFFF:
 00000f 0000      	.DW  0
@@ -1154,24 +1154,24 @@ Z:\home\m153\Documents\buzzer\List\buzzer.asm(982): warning: Register r6 already
                  ; 0000 0021                 delay_ms(500);
 000050 efe4      	LDI  R30,LOW(500)
 000051 e0f1      	LDI  R31,HIGH(500)
-000052 d063      	RCALL SUBOPT_0x0
+000052 d064      	RCALL SUBOPT_0x0
                  ; 0000 0022              }
                  ; 0000 0023            else
 000053 c00c      	RJMP _0x4
                  _0x3:
                  ; 0000 0024              {
-                 ; 0000 0025                PORTB.4 = 1;
-000054 9ac4      	SBI  0x18,4
+                 ; 0000 0025                PORTB.4 = 0;
+000054 98c4      	CBI  0x18,4
                  ; 0000 0026                 delay_ms(100);
 000055 e6e4      	LDI  R30,LOW(100)
 000056 e0f0      	LDI  R31,HIGH(100)
-000057 d05e      	RCALL SUBOPT_0x0
-                 ; 0000 0027                 PORTB.4 = 0;
-000058 98c4      	CBI  0x18,4
+000057 d05f      	RCALL SUBOPT_0x0
+                 ; 0000 0027                 PORTB.4 = 1;
+000058 9ac4      	SBI  0x18,4
                  ; 0000 0028                 delay_ms(50);
 000059 e3e2      	LDI  R30,LOW(50)
 00005a e0f0      	LDI  R31,HIGH(50)
-00005b d05a      	RCALL SUBOPT_0x0
+00005b d05b      	RCALL SUBOPT_0x0
                  ; 0000 0029                 j++;
 00005c e0e1      	LDI  R30,LOW(1)
 00005d e0f0      	LDI  R31,HIGH(1)
@@ -1336,107 +1336,109 @@ Z:\home\m153\Documents\buzzer\List\buzzer.asm(982): warning: Register r6 already
                  ; 0000 007D // Global enable interrupts
                  ; 0000 007E #asm("sei")
 00009c 9478      	sei
-                 ; 0000 007F 
-                 ; 0000 0080 while (1)
-                 _0xC:
-                 ; 0000 0081       {
-                 ; 0000 0082          if (PINB.0==1)
-00009d 9bb0      	SBIS 0x16,0
-00009e c00f      	RJMP _0xF
-                 ; 0000 0083          {
-                 ; 0000 0084             TCCR0A=0x02;
-00009f e0e2      	LDI  R30,LOW(2)
-0000a0 bdef      	OUT  0x2F,R30
-                 ; 0000 0085             TCCR0B=0x05;
-0000a1 e0e5      	LDI  R30,LOW(5)
-0000a2 bfe3      	OUT  0x33,R30
-                 ; 0000 0086             if (i>read_adc(3)*10)
-0000a3 e0e3      	LDI  R30,LOW(3)
-0000a4 93ea      	ST   -Y,R30
-0000a5 dfc8      	RCALL _read_adc
-0000a6 e0aa      	LDI  R26,LOW(10)
-0000a7 e0b0      	LDI  R27,HIGH(10)
-0000a8 d01c      	RCALL __MULW12U
-0000a9 15e6      	CP   R30,R6
-0000aa 05f7      	CPC  R31,R7
-0000ab f408      	BRSH _0x10
-                 ; 0000 0087             {
-                 ; 0000 0088                Bip();
-0000ac df9c      	RCALL _Bip
-                 ; 0000 0089              }
-                 ; 0000 008A 
-                 ; 0000 008B           }
-                 _0x10:
-                 ; 0000 008C         else
-0000ad c006      	RJMP _0x11
-                 _0xF:
-                 ; 0000 008D         {
-                 ; 0000 008E            TCCR0A=0x00;
-0000ae e0e0      	LDI  R30,LOW(0)
-0000af bdef      	OUT  0x2F,R30
-                 ; 0000 008F            TCCR0B=0x00;
-0000b0 bfe3      	OUT  0x33,R30
-                 ; 0000 0090            PORTB.4=0;
-0000b1 98c4      	CBI  0x18,4
-                 ; 0000 0091            i=0;
-0000b2 2466      	CLR  R6
-0000b3 2477      	CLR  R7
-                 ; 0000 0092         }
+                 ; 0000 007F PORTB.4=1;
+00009d 9ac4      	SBI  0x18,4
+                 ; 0000 0080 
+                 ; 0000 0081 while (1)
+                 _0xE:
+                 ; 0000 0082       {
+                 ; 0000 0083          if (PINB.0==1)
+00009e 9bb0      	SBIS 0x16,0
+00009f c00f      	RJMP _0x11
+                 ; 0000 0084          {
+                 ; 0000 0085             TCCR0A=0x02;
+0000a0 e0e2      	LDI  R30,LOW(2)
+0000a1 bdef      	OUT  0x2F,R30
+                 ; 0000 0086             TCCR0B=0x05;
+0000a2 e0e5      	LDI  R30,LOW(5)
+0000a3 bfe3      	OUT  0x33,R30
+                 ; 0000 0087             if (i>read_adc(3)*3)
+0000a4 e0e3      	LDI  R30,LOW(3)
+0000a5 93ea      	ST   -Y,R30
+0000a6 dfc7      	RCALL _read_adc
+0000a7 e0a3      	LDI  R26,LOW(3)
+0000a8 e0b0      	LDI  R27,HIGH(3)
+0000a9 d01c      	RCALL __MULW12U
+0000aa 15e6      	CP   R30,R6
+0000ab 05f7      	CPC  R31,R7
+0000ac f408      	BRSH _0x12
+                 ; 0000 0088             {
+                 ; 0000 0089                Bip();
+0000ad df9b      	RCALL _Bip
+                 ; 0000 008A              }
+                 ; 0000 008B 
+                 ; 0000 008C           }
+                 _0x12:
+                 ; 0000 008D         else
+0000ae c006      	RJMP _0x13
                  _0x11:
-                 ; 0000 0093       }
-0000b4 cfe8      	RJMP _0xC
-                 ; 0000 0094 }
-                 _0x14:
-0000b5 cfff      	RJMP _0x14
+                 ; 0000 008E         {
+                 ; 0000 008F            TCCR0A=0x00;
+0000af e0e0      	LDI  R30,LOW(0)
+0000b0 bdef      	OUT  0x2F,R30
+                 ; 0000 0090            TCCR0B=0x00;
+0000b1 bfe3      	OUT  0x33,R30
+                 ; 0000 0091            PORTB.4=1;
+0000b2 9ac4      	SBI  0x18,4
+                 ; 0000 0092            i=0;
+0000b3 2466      	CLR  R6
+0000b4 2477      	CLR  R7
+                 ; 0000 0093         }
+                 _0x13:
+                 ; 0000 0094       }
+0000b5 cfe8      	RJMP _0xE
+                 ; 0000 0095 }
+                 _0x16:
+0000b6 cfff      	RJMP _0x16
                  
                  	.CSEG
                  ;OPTIMIZER ADDED SUBROUTINE, CALLED 3 TIMES, CODE SIZE REDUCTION:2 WORDS
                  SUBOPT_0x0:
-0000b6 93fa      	ST   -Y,R31
-0000b7 93ea      	ST   -Y,R30
-0000b8 c000      	RJMP _delay_ms
+0000b7 93fa      	ST   -Y,R31
+0000b8 93ea      	ST   -Y,R30
+0000b9 c000      	RJMP _delay_ms
                  
                  
                  	.CSEG
                  _delay_ms:
-0000b9 91e9      	ld   r30,y+
-0000ba 91f9      	ld   r31,y+
-0000bb 9630      	adiw r30,0
-0000bc f039      	breq __delay_ms1
+0000ba 91e9      	ld   r30,y+
+0000bb 91f9      	ld   r31,y+
+0000bc 9630      	adiw r30,0
+0000bd f039      	breq __delay_ms1
                  __delay_ms0:
                 +
-0000bd eb80     +LDI R24 , LOW ( 0x4B0 )
-0000be e094     +LDI R25 , HIGH ( 0x4B0 )
+0000be eb80     +LDI R24 , LOW ( 0x4B0 )
+0000bf e094     +LDI R25 , HIGH ( 0x4B0 )
                 +__DELAY_USW_LOOP :
-0000bf 9701     +SBIW R24 , 1
-0000c0 f7f1     +BRNE __DELAY_USW_LOOP
+0000c0 9701     +SBIW R24 , 1
+0000c1 f7f1     +BRNE __DELAY_USW_LOOP
                  	__DELAY_USW 0x4B0
-0000c1 95a8      	wdr
-0000c2 9731      	sbiw r30,1
-0000c3 f7c9      	brne __delay_ms0
+0000c2 95a8      	wdr
+0000c3 9731      	sbiw r30,1
+0000c4 f7c9      	brne __delay_ms0
                  __delay_ms1:
-0000c4 9508      	ret
+0000c5 9508      	ret
                  
                  __MULW12U:
-0000c5 2e0a      	MOV  R0,R26
-0000c6 2e1b      	MOV  R1,R27
-0000c7 e181      	LDI  R24,17
-0000c8 27aa      	CLR  R26
-0000c9 1bbb      	SUB  R27,R27
-0000ca c005      	RJMP __MULW12U1
+0000c6 2e0a      	MOV  R0,R26
+0000c7 2e1b      	MOV  R1,R27
+0000c8 e181      	LDI  R24,17
+0000c9 27aa      	CLR  R26
+0000ca 1bbb      	SUB  R27,R27
+0000cb c005      	RJMP __MULW12U1
                  __MULW12U3:
-0000cb f410      	BRCC __MULW12U2
-0000cc 0da0      	ADD  R26,R0
-0000cd 1db1      	ADC  R27,R1
+0000cc f410      	BRCC __MULW12U2
+0000cd 0da0      	ADD  R26,R0
+0000ce 1db1      	ADC  R27,R1
                  __MULW12U2:
-0000ce 95b6      	LSR  R27
-0000cf 95a7      	ROR  R26
+0000cf 95b6      	LSR  R27
+0000d0 95a7      	ROR  R26
                  __MULW12U1:
-0000d0 95f7      	ROR  R31
-0000d1 95e7      	ROR  R30
-0000d2 958a      	DEC  R24
-0000d3 f7b9      	BRNE __MULW12U3
-0000d4 9508      	RET
+0000d1 95f7      	ROR  R31
+0000d2 95e7      	ROR  R30
+0000d3 958a      	DEC  R24
+0000d4 f7b9      	BRNE __MULW12U3
+0000d5 9508      	RET
                  
                  ;END OF CODE MARKER
                  __END_OF_CODE:
@@ -1470,7 +1472,7 @@ adiw  :   9 and   :   0 andi  :   1 asr   :   0 bclr  :   0 bld   :   0
 brbc  :   0 brbs  :   0 brcc  :   1 brcs  :   0 break :   0 breq  :   2 
 brge  :   1 brhc  :   0 brhs  :   0 brid  :   0 brie  :   0 brlo  :   0 
 brlt  :   0 brmi  :   0 brne  :   7 brpl  :   0 brsh  :   1 brtc  :   0 
-brts  :   0 brvc  :   0 brvs  :   0 bset  :   0 bst   :   0 cbi   :   2 
+brts  :   0 brvc  :   0 brvs  :   0 bset  :   0 bst   :   0 cbi   :   1 
 cbr   :   1 clc   :   0 clh   :   0 cli   :   1 cln   :   0 clr   :   6 
 cls   :   0 clt   :   0 clv   :   0 clz   :   0 com   :   0 cp    :   2 
 cpc   :   2 cpi   :   0 cpse  :   0 dec   :   4 des   :   0 eor   :   0 
@@ -1479,7 +1481,7 @@ inc   :   0 ld    :   6 ldd   :   0 ldi   :  43 lds   :   0 lpm   :  21
 lsl   :   0 lsr   :   1 mov   :  13 movw  :   0 mul   :   0 muls  :   0 
 mulsu :   0 neg   :   0 nop   :   0 or    :   0 ori   :   1 out   :  29 
 pop   :   0 push  :   0 rcall :   6 ret   :   4 reti  :   1 rjmp  :  20 
-rol   :   0 ror   :   3 sbc   :   0 sbci  :   0 sbi   :   3 sbic  :   0 
+rol   :   0 ror   :   3 sbc   :   0 sbci  :   0 sbi   :   5 sbic  :   0 
 sbis  :   2 sbiw  :   4 sbr   :   0 sbrc  :   0 sbrs  :   0 sec   :   0 
 seh   :   0 sei   :   1 sen   :   0 ser   :   0 ses   :   0 set   :   0 
 sev   :   0 sez   :   0 sleep :   0 spm   :   0 st    :   9 std   :   0 
@@ -1490,7 +1492,7 @@ Instructions used: 36 out of 114 (31.6%)
 ATtiny13 memory use summary [bytes]:
 Segment   Begin    End      Code   Data   Used    Size   Use%
 ---------------------------------------------------------------
-[.cseg] 0x000000 0x0001aa    414     12    426    1024  41.6%
+[.cseg] 0x000000 0x0001ac    416     12    428    1024  41.8%
 [.dseg] 0x000060 0x000070      0      0      0     159   0.0%
 [.eseg] 0x000000 0x000000      0      0      0      64   0.0%
 
